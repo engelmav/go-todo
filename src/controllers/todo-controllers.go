@@ -58,15 +58,6 @@ func GetAllTodos(context *gin.Context) {
 		return
 	}
 
-	// var response []todoResponse
-	// for _, todo := range todos {
-	// 	response = append(response, todoResponse{
-	// 		ID:          todo.ID,
-	// 		name:        todo.Name,
-	// 		description: todo.Description,
-	// 	})
-	// }
-
 	context.JSON(http.StatusOK, gin.H{
 		"status":  "200",
 		"message": "Success",
@@ -80,27 +71,7 @@ func UpdateTodo(context *gin.Context) {
 	reqParamId := context.Param("idTodo")
 	idTodo := cast.ToUint(reqParamId)
 
-	if err := context.BindJSON(&data); err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	todo := models.Todo{}
-
-	todoById := db.Where("id = ?", idTodo).First(&todo)
-	if todoById.Error != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"error": "Todo not found"})
-		return
-	}
-
-	todo.Name = data.Name
-	todo.Description = data.Description
-
-	result := db.Save(&todo)
-	if result.Error != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"error": "Something went wrong"})
-		return
-	}
+	// convert from Scala...
 
 	var response todoResponse
 	response.ID = todo.ID
